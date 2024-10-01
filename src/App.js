@@ -1,19 +1,26 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import MainPage from './components/MainPage';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './Login'; // Correct path to Login
+import MainMenu from './MainPage'; // Ensure the path and name are correct
 
-const App = () => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem('isAuthenticated') === 'true'
+  );
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/main" element={isAuthenticated ? <MainPage /> : <Navigate to="/main" />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/main" element={isAuthenticated ? <MainMenu /> : <Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );
-};
+}
 
 export default App;
